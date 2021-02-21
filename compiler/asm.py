@@ -12,7 +12,7 @@ def finish_exe():
 def finish_lib():
     read_project_file = open("project.json").read()
     project_file = json.loads(read_project_file)
-    os.rename("build/internal/main.o", f"build/{project_file['name']}")
+    os.rename("build/internal/main.o", f"build/lib{project_file['name']}")
 
 
 def compile_asm():
@@ -21,3 +21,6 @@ def compile_asm():
     os.system('cd build/internal && gcc -c main.S')
     if project_file['type'] == "exe":
         finish_exe()
+    elif project_file['type'] == "lib":
+        finish_lib()
+

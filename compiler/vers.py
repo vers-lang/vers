@@ -1,4 +1,5 @@
 import os
+import sys
 
 last_known_word = ""
 
@@ -9,6 +10,9 @@ def compile_word(word):
     if word == "decfun":
         asm_file.writelines(".globl ")
         last_known_word = "decfun"
+    elif word == "decextern":
+        asm_file.writelines(".extern ")
+        last_known_word = "decextern"
     elif word == "fun":
         last_known_word = "fun"
     elif word == "asm":
@@ -21,6 +25,9 @@ def compile_word(word):
         asm_file.writelines("\n")
     else:
         if last_known_word == "decfun":
+            asm_file.writelines(f"{word}\n")
+            last_known_word = word
+        elif last_known_word == "decextern":
             asm_file.writelines(f"{word}\n")
             last_known_word = word
         elif last_known_word == "fun":

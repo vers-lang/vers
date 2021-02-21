@@ -1,6 +1,11 @@
 decfun exit
+decfun print_stuff
+decextern printStuff
 
 fun exit() {
     asm at ret end_asm
 }
 
+fun print_stuff() {
+    asm at call printStuff end_asm
+}

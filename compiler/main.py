@@ -14,7 +14,7 @@ def setup():
     project_file = json.loads(read_project_file)
     global start_file
     if project_file['type'] == "exe":
-        start_file = "src/lib.vers"
+        start_file = "src/main.vers"
     elif project_file['type'] == "lib":
         start_file = "src/lib.vers"
     else:
