@@ -1,0 +1,6 @@
+decfun exit
+
+fun exit() {
+    asm at ret end_asm
+}
+

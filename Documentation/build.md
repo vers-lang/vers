@@ -20,7 +20,7 @@ Then move ``dist/vers`` to ``/bin/vers``
 Or
 
 ```commandline
-sh build.sh
+sudo sh build.sh
 ```
 Running this moves the ``vers`` file to the ``/bin/`` directory.
 
