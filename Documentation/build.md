@@ -15,12 +15,17 @@ Build Vers lang with pyinstaller:
 ```commandline
 pyinstaller --onefile vers.py
 ```
-Then move ``dist/vers`` to ``/bin/vers``
+Then move ``dist/vers`` to ``/bin/vers`` and compile the Vers stdlib
+```commandline
+cd std/ && vers build
+mv build/libstd /lib/vers/lib/
+```
 
 Or
 
 ```commandline
 sudo sh build.sh
+sudo sh lib.sh
 ```
 Running this moves the ``vers`` file to the ``/bin/`` directory.
 

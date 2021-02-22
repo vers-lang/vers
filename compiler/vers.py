@@ -1,6 +1,8 @@
 import os
 import sys
 
+from compiler.errors import *
+
 last_known_word = ""
 
 
@@ -23,6 +25,14 @@ def compile_word(word):
         asm_file.writelines("   ")
     elif word == "al":
         asm_file.writelines("\n")
+    elif word == "/*":
+        last_known_word = "/*"
+    elif word == "*/":
+        last_known_word = " "
+    elif word == "{":
+        last_known_word = word
+    elif word == "}":
+        last_known_word = word
     else:
         if last_known_word == "decfun":
             asm_file.writelines(f"{word}\n")
@@ -38,6 +48,16 @@ def compile_word(word):
             asm_file.writelines(f"{word} ")
         elif last_known_word == "end_asm":
             last_known_word = " "
+        elif last_known_word == "/*":
+            pass
+        else:
+            if word.find("();"):
+                call_fun = word.replace("();", "")
+                asm_file.writelines(f"   call {call_fun}")
+                last_known_word = word
+            else:
+                print(f"\n{word}")
+                compiler_error(e1v)
 
 
 def build_script():

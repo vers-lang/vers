@@ -7,5 +7,5 @@ fun exit() {
 }
 
 fun print_stuff() {
-    asm at call printStuff end_asm
+    printStuff();
 }
