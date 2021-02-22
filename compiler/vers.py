@@ -1,6 +1,7 @@
 import os
 import sys
 
+from colorama import *
 from compiler.errors import *
 
 last_known_word = ""
@@ -68,7 +69,6 @@ def build_script():
 
 
 def compile_vers(file):
-    print("Compiling internal files...")
     with open(file) as vers_file:
         for line in vers_file:
             for word in line.split():
@@ -76,7 +76,7 @@ def compile_vers(file):
 
 
 def build_dir():
-    print("Creating build directory")
+    print(f"Creating {Fore.BLUE}build/{Style.RESET_ALL} directory")
     os.mkdir("build/")
     os.mkdir("build/external/")
     os.mkdir("build/imports/")

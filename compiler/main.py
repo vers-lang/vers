@@ -1,7 +1,9 @@
-from compiler.asm import *
+from compiler.compile import *
 from compiler.errors import *
+from compiler.finish import *
 from compiler.vers import *
 
+from colorama import *
 import json
 import os
 import platform
@@ -29,7 +31,7 @@ def setup():
 def main():
     read_project_file = open("project.json").read()
     project_file = json.loads(read_project_file)
-    print(f"Compiling {project_file['name']} {project_file['version']}")
+    print(f"{Fore.LIGHTGREEN_EX}Compiling {Fore.BLUE}{project_file['name']} {Fore.GREEN}{project_file['version']}{Style.RESET_ALL}")
     setup()
     if os.path.exists("build/"):
         print("Cleaning...")
@@ -37,4 +39,11 @@ def main():
     build_dir()
     build_script()
     compile_vers(start_file)
-    compile_asm()
+    compile_internal()
+    compile_external()
+    if start_file == "src/main.vers":
+        link("")
+    elif start_file == "src/lib.vers":
+        link("-nostartfiles")
+    finish()
+    print(f"\nDone {Fore.LIGHTGREEN_EX}compiling {Fore.BLUE}{project_file['name']}{Style.RESET_ALL}")

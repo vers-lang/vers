@@ -6,6 +6,6 @@ Supported on x86/x86_64 Linux
 --- 
 
 ### TODO:
-- [ ] Compile external files
+- [x] Compile external files
 - [ ] Add imports
 - [ ] Make support for arm32 and aarch64(arm64)
