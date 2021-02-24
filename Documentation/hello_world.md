@@ -1,9 +1,10 @@
-### Hello World!
+### Hello World! (concept)
 
 Hello World example:
 ```vers
+import std;
+use print;
 decfun main
-import std.print
 
 fun main() {
     print("Hello world!")

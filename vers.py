@@ -13,6 +13,8 @@ def main(arg):
         run()
     elif arg == "build":
         compiler.main.main()
+    else:
+        print(f"{arg} not a Vers command")
 
 
 if __name__ == '__main__':

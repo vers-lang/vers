@@ -1,8 +1,7 @@
 import os
-import sys
 
-from colorama import *
 from compiler.errors import *
+from compiler.imports import *
 
 last_known_word = ""
 
@@ -34,6 +33,10 @@ def compile_word(word):
         last_known_word = word
     elif word == "}":
         last_known_word = word
+    elif word == "import":
+        last_known_word = "import"
+    elif word == "use":
+        last_known_word = "use"
     else:
         if last_known_word == "decfun":
             asm_file.writelines(f"{word}\n")
@@ -51,6 +54,12 @@ def compile_word(word):
             last_known_word = " "
         elif last_known_word == "/*":
             pass
+        elif last_known_word == "import":
+            lib_import = word.replace(";", "")
+            compile_import(lib_import)
+        elif last_known_word == "use":
+            use_function = word.replace(";", "")
+            asm_file.writelines(f".extern {use_function}")
         else:
             if word.find("();"):
                 call_fun = word.replace("();", "")
@@ -76,7 +85,6 @@ def compile_vers(file):
 
 
 def build_dir():
-    print(f"Creating {Fore.BLUE}build/{Style.RESET_ALL} directory")
     os.mkdir("build/")
     os.mkdir("build/external/")
     os.mkdir("build/imports/")

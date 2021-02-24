@@ -36,14 +36,18 @@ def main():
     if os.path.exists("build/"):
         print("Cleaning...")
         os.system('rm -rf build/')
+    print(f"Creating {Fore.BLUE}build/{Style.RESET_ALL} directory")
     build_dir()
     build_script()
     compile_vers(start_file)
+    print(f"{Fore.LIGHTGREEN_EX}Compiling {Fore.BLUE}internal{Style.RESET_ALL} files...")
     compile_internal()
+    print(f"{Fore.LIGHTGREEN_EX}Compiling {Fore.BLUE}external{Style.RESET_ALL} files...")
     compile_external()
     if start_file == "src/main.vers":
         link("")
     elif start_file == "src/lib.vers":
         link("-nostartfiles")
     finish()
+    print(f"{Fore.GREEN}Done{Style.RESET_ALL}")
     print(f"\nDone {Fore.LIGHTGREEN_EX}compiling {Fore.BLUE}{project_file['name']}{Style.RESET_ALL}")

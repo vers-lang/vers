@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Compiling Vers stdlib..."
-mkdir /lib/vers/ && mkdir /lib/vers/lib/
-cp -r std/ /lib/vers/lib/
+mkdir /home/$USER/verslib/ && /home/$USER/verslib/lib/
+cp -r std/ /home/$USER/verslib/
 cd std/ && vers build
-mv build/libstd /lib/vers/lib/
+mv build/libstd /home/$USER/verslib/lib

@@ -1,8 +1,9 @@
+from colorama import *
 import sys
 
 
 def compiler_error(message):
-    print(message)
+    print(f"{Fore.RED}{message}{Style.RESET_ALL}")
     sys.exit(0)
 
 
