@@ -1,3 +1,4 @@
+import cli.install
 import cli.new
 import cli.run
 import cli.version
@@ -24,3 +25,9 @@ def run():
     else:
         print("Not executable")
 
+
+def install():
+    lib = input("Library name: ")
+    author = input("Author of library: ")
+    libversion = input("Library version name: ")
+    cli.install.install_lib(author, lib, libversion)

@@ -13,6 +13,8 @@ def main(arg):
         run()
     elif arg == "build":
         compiler.main.main()
+    elif arg == "install":
+        install()
     else:
         print(f"{arg} not a Vers command")
 
