@@ -1,7 +1,9 @@
 .idea/
-__pycache__/
 build/
 dist/
+target/
 venv/
 
-vers.spec
+Cargo.lock
+new.spec
+vers

@@ -1,0 +1,12 @@
+[package]
+name = "vers"
+version = "1.0.0"
+edition = "2018"
+
+[workspace]
+members = [
+    "cli/",
+]
+
+[dependencies]
+cli = { path = "cli/" }

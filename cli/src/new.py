@@ -29,7 +29,7 @@ def std_import():
             print(f"{std} it not 'y' or 'n'")
 
 
-def create_new():
+def main():
     name = input("Project name: ")
     os.mkdir(name)
     os.mkdir(f"{name}/src/")
@@ -51,3 +51,7 @@ def create_new():
     elif std == "n":
         project_file.writelines('   "std": false\n')
     project_file.writelines('}\n')
+
+
+if __name__ == '__main__':
+    main()
