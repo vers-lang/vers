@@ -1,5 +1,5 @@
 extern crate cli;
-use cli::{new, version};
+use cli::{help, install, new, version};
 
 use std::env;
 
@@ -10,5 +10,13 @@ fn main() {
         new::main();
     } else if vers_arg == "--version" {
         version::main();
+    } else if vers_arg == "install" {
+        install::main();
+    } else if vers_arg == "--help" {
+        help::main();
+    } else if vers_arg == "build" {
+
+    } else {
+        println!("{} not a Vers command\nTry: vers --help", vers_arg);
     }
 }

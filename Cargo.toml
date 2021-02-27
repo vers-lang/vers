@@ -1,12 +1,15 @@
 [package]
 name = "vers"
 version = "1.0.0"
+authors = ["NathanMcMillan54 <nathanmcmillan54@gmail.com>"]
 edition = "2018"
 
 [workspace]
 members = [
     "cli/",
+    "compiler/",
 ]
 
 [dependencies]
 cli = { path = "cli/" }
+compiler = { path = "compiler/" }

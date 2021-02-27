@@ -5,5 +5,4 @@ target/
 venv/
 
 Cargo.lock
-new.spec
-vers
+verspy.spec
