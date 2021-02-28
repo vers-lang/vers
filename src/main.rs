@@ -1,6 +1,8 @@
 extern crate cli;
 use cli::{help, install, new, version};
 
+extern crate compiler;
+
 use std::env;
 
 fn main() {
@@ -15,7 +17,7 @@ fn main() {
     } else if vers_arg == "--help" {
         help::main();
     } else if vers_arg == "build" {
-
+        compiler::main();
     } else {
         println!("{} not a Vers command\nTry: vers --help", vers_arg);
     }

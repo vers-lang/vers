@@ -5,3 +5,5 @@ authors = ["NathanMcMillan54 <nathanmcmillan54@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+colour = "0.5.0"
+serde_json = "1.0.63"
