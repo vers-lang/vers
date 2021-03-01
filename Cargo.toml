@@ -1,7 +1,7 @@
 [package]
 name = "vers"
 version = "1.0.0"
-authors = ["NathanMcMillan54 <nathanmcmillan54@gmail.com>"]
+authors = ["The Vers developers"]
 edition = "2018"
 
 [workspace]

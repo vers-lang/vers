@@ -4,13 +4,17 @@ extern crate colour;
 
 extern crate serde_json;
 
+mod compiler;
 mod messages;
 mod project;
 
 /* ----- */
 
 // Compiler
-use messages::{compiler_message, errors, warnings};
+use messages::{compiler_message, errors, ERRORS, warnings, WARNINGS};
+use crate::messages::errors::compiler_error;
+use crate::messages::warnings::compiler_warning;
+use std::process::exit;
 
 static mut PROJECT_TYPE: &'static str = "exe";
 
@@ -30,6 +34,14 @@ fn setup_init() {
 
 fn compiler_init() {
 
+}
+
+unsafe fn exit_compiler() {
+    println!("\nExit with:");
+    compiler_error(format_args!("{}{}{}", ERRORS, " Errors", "\n").to_string().as_str());
+    compiler_warning(format_args!("{}{}{}", WARNINGS, " Warnings", "\n").to_string().as_str());
+    print!("\n");
+    exit(0);
 }
 
 pub fn main() {

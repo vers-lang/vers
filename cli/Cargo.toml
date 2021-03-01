@@ -1,4 +1,5 @@
 [package]
 name = "cli"
 version = "0.1.0"
+authors = ["The Vers developers"]
 edition = "2018"

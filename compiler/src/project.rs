@@ -1,4 +1,4 @@
-use crate::{exe, lib};
+use crate::{exe, exit_compiler, lib, PROJECT_TYPE};
 use crate::messages::{compiler_message, errors::compiler_error, messages::*};
 use serde_json::{from_reader, Value};
 use std::fs::{File};
@@ -39,12 +39,35 @@ unsafe fn project_type() {
     }
 }
 
+unsafe fn files_exist() {
+    if PROJECT_TYPE == "exe" {
+        if Path::new("src/main.vers").exists() {
+            compiler_message("src/main.vers", "exists", "");
+        } else {
+            compiler_error(E2V);
+            exit_compiler();
+        }
+    } else if PROJECT_TYPE == "lib" {
+        if Path::new("src/lib.vers").exists() {
+            compiler_message("src/lib.vers", "exists", "");
+        } else {
+            compiler_error(E2V);
+            exit_compiler();
+        }
+    } else {
+        compiler_error(E2V);
+        exit_compiler();
+    }
+}
+
 pub(crate) fn init() {
     unsafe {
         exists();
         // If it doesn't exist check again anyways
         // Just in case it somehow just shows up
         project_type();
+        // see if main file[s] exist
+        files_exist();
         compiler_message("Project init score = ", SCORE.to_string().as_str(), "/3");
     }
 }
