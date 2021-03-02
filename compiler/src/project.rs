@@ -42,14 +42,16 @@ unsafe fn project_type() {
 unsafe fn files_exist() {
     if PROJECT_TYPE == "exe" {
         if Path::new("src/main.vers").exists() {
-            compiler_message("src/main.vers", "exists", "");
+            compiler_message("src/main.vers ", "exists", "");
+            SCORE = SCORE + 1;
         } else {
             compiler_error(E2V);
             exit_compiler();
         }
     } else if PROJECT_TYPE == "lib" {
         if Path::new("src/lib.vers").exists() {
-            compiler_message("src/lib.vers", "exists", "");
+            compiler_message("src/lib.vers ", "exists", "");
+            SCORE = SCORE + 1;
         } else {
             compiler_error(E2V);
             exit_compiler();

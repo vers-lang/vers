@@ -1,6 +1,9 @@
 use crate::messages::{errors::compiler_error, ERRORS, messages::*, warnings::compiler_warning, WARNINGS, compiler_message};
+use std::fs::{create_dir, File, remove_dir};
 use std::env::{consts::{ARCH, OS}};
-use crate::exit_compiler;
+use std::path::{Path};
+use std::process::{Command};
+use crate::{exit_compiler, PROJECT_TYPE};
 
 static mut SCORE: i32 = 0;
 
@@ -27,16 +30,25 @@ unsafe fn check_os() {
     }
 }
 
-unsafe fn test() {
-    let a = 1;
-    let b = 1;
-    let c = a + b;
-    if c == 2 {
-        SCORE = SCORE + 1;
-    } else {
-        println!("{} + {} = {}\nMath just broke and that's not good.", a, b, c);
-        exit_compiler();
+unsafe fn build_dir() {
+    if Path::new("build/").exists() {
+        compiler_message("Cleaning ", "precompiled ", "code...");
+        remove_dir("build/");
     }
+    create_dir("build/");
+    create_dir("build/externals/");
+    create_dir("build/internal/");
+    create_dir("build/imports/");
+    SCORE = SCORE + 1;
+}
+
+fn run_build_script() {
+    if Path::new("build.sh").exists() {
+        compiler_message("Running ", "build ", "script...");
+        Command::new("sh")
+            .arg("build.sh")
+            .spawn();
+    } else { /* Nothing */ }
 }
 
 pub(crate) fn init() {
@@ -45,8 +57,9 @@ pub(crate) fn init() {
         check_arch();
         // Check of os/kernel is supported
         check_os();
-        // A third function
-        test();
+
+        build_dir();
+        run_build_script();
         compiler_message("Compiler init score = ", SCORE.to_string().as_str(), "/3");
     }
 }
