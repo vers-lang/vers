@@ -1,4 +1,4 @@
-use super::asm::{*};
+use super::asm::{asm::*};
 use crate::PROJECT_TYPE;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read, Write};

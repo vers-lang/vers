@@ -17,7 +17,7 @@ mod vers;
 use messages::{compiler_message, errors, ERRORS, warnings, WARNINGS};
 use crate::messages::errors::compiler_error;
 use crate::messages::warnings::compiler_warning;
-use vers::compile;
+use vers::{asm, compile};
 use std::process::exit;
 
 static mut PROJECT_TYPE: &'static str = "exe";
@@ -38,10 +38,14 @@ fn setup_init() {
 
 fn compiler_init() {
     compiler::init();
+    compiler_message("Compiling...", "", "");
     unsafe { compile::compile_vers(); }
+    compiler_message("Compiling ", "internal files...", "");
+    asm::compile::compile_asm();
+    compiler_message("Compiling ", "external files...", "");
 }
 
-unsafe fn exit_compiler() {
+pub(crate) unsafe fn exit_compiler() {
     println!("\nExit with:");
     compiler_error(format_args!("{}{}{}", ERRORS, " Errors", "\n").to_string().as_str());
     compiler_warning(format_args!("{}{}{}", WARNINGS, " Warnings", "\n").to_string().as_str());
@@ -52,7 +56,6 @@ unsafe fn exit_compiler() {
 pub fn main() {
     println!("Checking if project will have any problems...");
     setup_init();
-    compiler_message("Compiling...", "", "");
     compiler_init();
     unsafe { exit_compiler(); }
 }

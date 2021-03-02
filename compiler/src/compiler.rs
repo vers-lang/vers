@@ -1,4 +1,4 @@
-use crate::messages::{errors::compiler_error, ERRORS, messages::*, warnings::compiler_warning, WARNINGS, compiler_message};
+use crate::messages::{compiler_message, errors::compiler_error, ERRORS, messages::*, warnings::compiler_warning, WARNINGS};
 use std::fs::{create_dir, File, remove_dir};
 use std::env::{consts::{ARCH, OS}};
 use std::path::{Path};
