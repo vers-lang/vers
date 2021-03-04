@@ -52,6 +52,8 @@ pub(crate) unsafe fn compile_vers() {
     let reader = BufReader::new(File::open(main_file_name).expect("Cannot open main project file"));
     let mut asm_file = File::create("build/internal/main.S").unwrap();
 
+    asm_file.write(b".globl main\n\n");
+
     for line in reader.lines() {
         for mut word in line.unwrap().split_whitespace() {
             println!("word = {}\nLAST_UKNOWN_WORD = {}", word, LAST_KNOWN_WORD);
@@ -62,9 +64,7 @@ pub(crate) unsafe fn compile_vers() {
                 LAST_KNOWN_WORD = "extern";
             } else if word == "asm" {
                 if add_asm(word) == 0 {
-                    // Nothing
-                } else if add_asm(word) == 1 {
-                    asm_file.write_fmt(format_args!("{}", ASM_LINE));
+                    LAST_KNOWN_WORD = "asm";
                 }
             }
             // LAST_KNOWN_WORD
@@ -75,10 +75,14 @@ pub(crate) unsafe fn compile_vers() {
                         asm_file.write_fmt(format_args!("{}{}{}", word.replace("()", ""), FUN, "\n"));
                     }
                     LAST_KNOWN_WORD = "";
-                } else if LAST_KNOWN_WORD == "extern" {
+            } else if LAST_KNOWN_WORD == "extern" {
                     asm_file.write_fmt(format_args!("{} {}", EXTERN, word.replace(";", "").as_str()));
                     LAST_KNOWN_WORD = "";
+            } else if LAST_KNOWN_WORD == "asm" {
+                if add_asm(word) == 1 {
+                    asm_file.write_fmt(format_args!("{}", ASM_LINE));
                 }
+            }
             // Ignore
             else if word == "{" || word == "}" {
                 // Nothing
