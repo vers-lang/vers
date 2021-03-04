@@ -20,6 +20,7 @@ use crate::messages::warnings::compiler_warning;
 use vers::{asm, compile};
 use std::process::exit;
 
+static mut PROJECT_NAME: &'static str = "";
 static mut PROJECT_TYPE: &'static str = "exe";
 
 unsafe fn exe() {
@@ -41,7 +42,7 @@ fn compiler_init() {
     compiler_message("Compiling...", "", "");
     unsafe { compile::compile_vers(); }
     compiler_message("Compiling ", "internal files...", "");
-    asm::compile::compile_asm();
+    unsafe { asm::compile::compile_asm(); }
     compiler_message("Compiling ", "external files...", "");
 }
 

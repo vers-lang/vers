@@ -1,1 +1,2 @@
-pub const CALL: &'static str = "call ";
+pub const CALL: &'static str = "call";
+

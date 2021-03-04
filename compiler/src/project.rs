@@ -1,4 +1,4 @@
-use crate::{exe, exit_compiler, lib, PROJECT_TYPE};
+use crate::{exe, exit_compiler, lib, PROJECT_TYPE, PROJECT_NAME};
 use crate::messages::{compiler_message, errors::compiler_error, messages::*};
 use serde_json::{from_reader, Value};
 use std::fs::{File};

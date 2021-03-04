@@ -1,6 +1,7 @@
 // Vers errors
 pub const E1V: &'static str = "E1V: Cannot find project.json file\n";
 pub const E2V: &'static str = "E2V: Cannot find project main file (main.vers/lib.vers)\n";
+pub const E3V: &'static str = "E2V: Unknown instruction\n";
 
 // Vers warnings
 pub const W1V: &'static str = "W1V: Cannot read project.json file\n";

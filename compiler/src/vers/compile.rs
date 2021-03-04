@@ -2,8 +2,14 @@ use super::asm::{asm::*};
 use crate::PROJECT_TYPE;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read, Write};
+use std::ptr::replace;
+use std::fmt::Debug;
+use crate::messages::errors::compiler_error;
+use crate::messages::messages::E3V;
 
 static mut LAST_KNOWN_WORD: &str = "";
+static mut ASM_LINE: &str = "";
+static mut WRITE_ASM: bool = false;
 
 fn project_main_file() -> &'static str {
     unsafe {
@@ -25,26 +31,61 @@ unsafe fn t_asm_file() -> &'static str {
     }
 }
 
-pub(crate) unsafe fn compile_vers() -> std::io::Result<()> {
+unsafe fn add_asm(asm: &str) -> i32 {
+    if asm.contains("'") && WRITE_ASM == false {
+        ASM_LINE.to_string().push_str("\n   ");
+        ASM_LINE.to_string().push_str(asm.replace("'", "").as_str());
+        WRITE_ASM = true;
+        return 0
+    } else if asm.contains("';") {
+        ASM_LINE.to_string().push_str(asm.replace("'", "").as_str());
+        WRITE_ASM = false;
+        return 1
+    } else {
+        ASM_LINE.to_string().push_str(asm);
+        return 0;
+    }
+}
+
+pub(crate) unsafe fn compile_vers() {
     let mut main_file_name = project_main_file();
     let reader = BufReader::new(File::open(main_file_name).expect("Cannot open main project file"));
-    let mut asm_file = File::create("build/internal/main.S")?;
+    let mut asm_file = File::create("build/internal/main.S").unwrap();
 
     for line in reader.lines() {
-        for word in line.unwrap().split_whitespace() {
+        for mut word in line.unwrap().split_whitespace() {
+            println!("word = {}\nLAST_UKNOWN_WORD = {}", word, LAST_KNOWN_WORD);
+            // word
             if word == "fun" {
                 LAST_KNOWN_WORD = "fun";
             } else if word == "extern" {
                 LAST_KNOWN_WORD = "extern";
-            }
-            else {
-                if LAST_KNOWN_WORD == "fun" {
-                    asm_file.write_fmt(format_args!("{}{}", word, FUN));
-                } else if LAST_KNOWN_WORD == "extern" {
-                    asm_file.write_fmt(format_args!("{} {}", EXTERN, word));
+            } else if word == "asm" {
+                if add_asm(word) == 0 {
+                    // Nothing
+                } else if add_asm(word) == 1 {
+                    asm_file.write_fmt(format_args!("{}", ASM_LINE));
                 }
+            }
+            // LAST_KNOWN_WORD
+            else if LAST_KNOWN_WORD == "fun" {
+                    if word == "main".replace("()", "") {
+                        asm_file.write_fmt(format_args!("{}{}{}{}", ".globl main\n\n", "main", FUN, "\n"));
+                    } else {
+                        asm_file.write_fmt(format_args!("{}{}{}", word.replace("()", ""), FUN, "\n"));
+                    }
+                    LAST_KNOWN_WORD = "";
+                } else if LAST_KNOWN_WORD == "extern" {
+                    asm_file.write_fmt(format_args!("{} {}", EXTERN, word.replace(";", "").as_str()));
+                    LAST_KNOWN_WORD = "";
+                }
+            // Ignore
+            else if word == "{" || word == "}" {
+                // Nothing
+            } else {
+                    println!("\n{}", word);
+                    compiler_error(E3V);
             }
         }
     }
-    asm_file.write_fmt(format_args!("{}", "\n"))
 }

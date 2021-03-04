@@ -1,10 +1,13 @@
+use crate::PROJECT_NAME;
+use std::fs::rename;
 use std::process::{Command};
 
-pub fn compile_asm() {
-    println!("Running cd && gcc");
-    Command::new("cd")
-        .arg("build/internal/")
-        .arg("&&")
-        .args(&["gcc", "-c", "main.S"])
-        .spawn();
+extern "C" { fn compileInternal() -> !; }
+extern "C" { fn compileExternal() -> !; }
+extern "C" { fn link(name: *const u8) -> !; }
+
+pub(crate) unsafe fn compile_asm() {
+    compileInternal();
+    compileExternal();
+    link(PROJECT_NAME.as_ptr());
 }
