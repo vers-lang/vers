@@ -7,6 +7,7 @@ extern crate serde_json;
 
 mod arch;
 mod compiler;
+mod functions;
 mod messages;
 mod project;
 mod vers;
