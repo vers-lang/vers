@@ -3,7 +3,7 @@ use std::fs::{create_dir, File, remove_dir};
 use std::env::{consts::{ARCH, OS}};
 use std::path::{Path};
 use std::process::{Command};
-use crate::{exit_compiler, PROJECT_TYPE};
+use crate::{exit_compiler, EXTERNAL_FILES, PROJECT_TYPE};
 
 static mut SCORE: i32 = 0;
 
@@ -45,9 +45,11 @@ unsafe fn build_dir() {
 fn run_build_script() {
     if Path::new("build.sh").exists() {
         compiler_message("Running ", "build ", "script...");
+
         Command::new("sh")
             .arg("build.sh")
             .spawn();
+    unsafe { EXTERNAL_FILES = true }
     } else { /* Nothing */ }
 }
 

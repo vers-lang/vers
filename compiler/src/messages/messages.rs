@@ -5,6 +5,7 @@ pub const E3V: &'static str = "E2V: Unknown instruction\n";
 
 // Vers warnings
 pub const W1V: &'static str = "W1V: Cannot read project.json file\n";
+pub const W2V: &'static str = "W2V: Cannot find project type\n";
 
 // Hardware errors
 pub const E1H: &'static str = "E1H: CPU architecture not supported\n";

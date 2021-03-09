@@ -15,14 +15,15 @@ mod vers;
 /* ----- */
 
 // Compiler
-use messages::{compiler_message, errors, ERRORS, warnings, WARNINGS};
+use messages::{compiler_message, errors, ERRORS, messages::*, warnings, WARNINGS};
 use crate::messages::errors::compiler_error;
 use crate::messages::warnings::compiler_warning;
-use vers::{asm, compile};
+use vers::{asm, asm::compile::*, compile};
 use std::process::exit;
 
 static mut PROJECT_NAME: &'static str = "";
 static mut PROJECT_TYPE: &'static str = "exe";
+static mut EXTERNAL_FILES: bool = false;
 
 unsafe fn exe() {
     println!("Project type is exe");
@@ -42,7 +43,6 @@ fn compiler_init() {
     compiler::init();
     compiler_message("Compiling...", "", "");
     unsafe { compile::compile_vers(); }
-    compiler_message("Compiling ", "internal files...", "");
     unsafe { asm::compile::compile_asm(); }
     compiler_message("Compiling ", "external files...", "");
 }
@@ -59,5 +59,21 @@ pub fn main() {
     println!("Checking if project will have any problems...");
     setup_init();
     compiler_init();
+    println!("compiling project");
+    unsafe {
+        println!("Project name: {}\nProject type: {}\n", PROJECT_NAME, PROJECT_TYPE);
+        if PROJECT_TYPE == "exe" {
+            compiler_message("Compiling project ", "as ", "executable");
+            compile_exe(PROJECT_NAME);
+        } else if PROJECT_NAME == "lib" {
+            compiler_message("Compiling project ", "as ", "library");
+            compile_lib(PROJECT_NAME);
+        } else {
+            compiler_warning(W2V);
+            println!("Defaulting to executable");
+            compiler_message("Compiling project ", "as ", "executable");
+            compile_lib(PROJECT_NAME);
+        }
+    }
     unsafe { exit_compiler(); }
 }
