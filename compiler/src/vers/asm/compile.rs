@@ -18,6 +18,10 @@ fn compile_internal() {
     set_current_dir("build/internal/");
     Command::new("pwd")
         .spawn();
+    Command::new("gcc")
+        .arg("-c")
+        .arg("main.S")
+        .spawn();
 }
 
 fn compile_external() {
@@ -36,5 +40,10 @@ pub(crate) fn compile_lib(name: &str) {
 }
 
 pub(crate) fn compile_exe(name: &str) {
-
+    Command::new("gcc")
+        .arg("main.o")
+        .arg("-o")
+        .arg("main")
+        .spawn();
+    rename("main", "../main");
 }
