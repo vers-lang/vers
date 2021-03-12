@@ -11,30 +11,17 @@ static mut LAST_KNOWN_WORD: &str = "";
 static mut ASM_LINE: &str = "";
 
 fn project_main_file() -> &'static str {
-    unsafe {
-        if PROJECT_TYPE == "exe" {
-            "src/main.vers"
-        } else if PROJECT_TYPE == "lib" {
-            "src/lib.vers"
-        } else { "src/main.vers" }
-    }
+    "src/main.vers"
 }
 
 unsafe fn t_asm_file() -> &'static str {
-    if PROJECT_TYPE == "exe" {
-        "build/internals/main.S"
-    } else if PROJECT_TYPE == "lib" {
-        "build/internals/lib.S"
-    } else {
-        "build/internals/main.S"
-    }
+    "build/internal/main.S"
 }
 
 pub(crate) unsafe fn compile_vers() {
     let mut main_file_name = project_main_file();
     let reader = BufReader::new(File::open(main_file_name).expect("Cannot open main project file"));
     let mut asm_file = File::create("build/internal/main.S").unwrap();
-
     asm_file.write(b".globl main\n\n");
 
     for line in reader.lines() {
@@ -49,22 +36,33 @@ pub(crate) unsafe fn compile_vers() {
             } else if word == "asm" {
                 LAST_KNOWN_WORD = "asm";
             }
-            // LAST_KNOWN_WORD
-            else if LAST_KNOWN_WORD == "fun" {
-                    if word == "main".replace("()", "") {
-                        asm_file.write_fmt(format_args!("{}{}{}{}", ".globl main\n\n", "main", FUN, "\n"));
-                    } else {
-                        asm_file.write_fmt(format_args!("{}{}{}", word.replace("()", ""), FUN, "\n"));
-                    }
-                    LAST_KNOWN_WORD = "";
-            } else if LAST_KNOWN_WORD == "extern" {
-                    asm_file.write_fmt(format_args!("{} {}", EXTERN, word.replace(";", "").as_str()));
-                    LAST_KNOWN_WORD = "";
-            }
             // Compiler functions
             else if word.contains("il_asm") {
                 let asm = il_asm(word);
+                asm_file.write_fmt(format_args!("{}", "    "));
                 asm_file.write_fmt(format_args!("{}", asm));
+                LAST_KNOWN_WORD = "il_asm";
+            }
+            // LAST_KNOWN_WORD
+            else if LAST_KNOWN_WORD == "fun" {
+                if word == "main".replace("()", "") {
+                    asm_file.write_fmt(format_args!("{}{}{}{}", ".globl main\n\n", "main", FUN, "\n"));
+                } else {
+                    asm_file.write_fmt(format_args!("{}{}{}", word.replace("()", ""), FUN, "\n"));
+                }
+                LAST_KNOWN_WORD = "";
+            } else if LAST_KNOWN_WORD == "extern" {
+                asm_file.write_fmt(format_args!("{} {}", EXTERN, word.replace(";", "").as_str()));
+                LAST_KNOWN_WORD = "";
+            } else if LAST_KNOWN_WORD == "il_asm" {
+                if word.contains("');") {
+                    let asm = il_asm(word);
+                    asm_file.write_fmt(format_args!("{}{}", asm, "\n"));
+                    LAST_KNOWN_WORD = " ";
+                } else {
+                    let asm = il_asm(word);
+                    asm_file.write_fmt(format_args!("{}{}", " ", asm));
+                }
             }
             // Ignore
             else if word == "{" || word == "}" {

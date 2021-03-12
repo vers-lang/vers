@@ -1,4 +1,5 @@
 use crate::messages::{compiler_message, errors::compiler_error, ERRORS, messages::*, warnings::compiler_warning, WARNINGS};
+use crate::project::{project_name};
 use std::fs::{create_dir, File, remove_dir};
 use std::env::{consts::{ARCH, OS}};
 use std::path::{Path};
@@ -39,6 +40,7 @@ unsafe fn build_dir() {
     create_dir("build/externals/");
     create_dir("build/internal/");
     create_dir("build/imports/");
+    project_name();
     SCORE = SCORE + 1;
 }
 

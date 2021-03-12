@@ -1,5 +1,6 @@
 use crate::messages::{compiler_message, messages::*, warnings::compiler_warning};
 use crate::{EXTERNAL_FILES, PROJECT_NAME, PROJECT_TYPE};
+use libc::sync;
 use std::env::set_current_dir;
 use std::fs::rename;
 use std::process::{Command};
@@ -39,11 +40,13 @@ pub(crate) fn compile_lib(name: &str) {
 
 }
 
-pub(crate) fn compile_exe(name: &str) {
+pub(crate) unsafe fn compile_exe(name: &str) {
+    set_current_dir("build/internal/");
+    println!("{}", PROJECT_NAME);
+    let name = format_args!("{}{}", "../", PROJECT_NAME).to_string();
     Command::new("gcc")
         .arg("main.o")
         .arg("-o")
-        .arg("main")
+        .arg(name.as_str())
         .spawn();
-    rename("main", "../main");
 }

@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate colour;
 
+extern crate libc;
 extern crate serde_json;
 
 mod arch;
@@ -18,12 +19,18 @@ mod vers;
 use messages::{compiler_message, errors, ERRORS, messages::*, warnings, WARNINGS};
 use crate::messages::errors::compiler_error;
 use crate::messages::warnings::compiler_warning;
+use core::fmt::Arguments;
 use vers::{asm, asm::compile::*, compile};
 use std::process::exit;
 
 static mut PROJECT_NAME: &'static str = "";
 static mut PROJECT_TYPE: &'static str = "exe";
 static mut EXTERNAL_FILES: bool = false;
+
+unsafe fn set_project_name(name: &'static str) {
+    PROJECT_NAME = name;
+    println!("PROJECT_NAME = {}", PROJECT_NAME);
+}
 
 unsafe fn exe() {
     println!("Project type is exe");

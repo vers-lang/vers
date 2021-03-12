@@ -6,4 +6,5 @@ edition = "2018"
 
 [dependencies]
 colour = "0.5.0"
+libc = "0.2.88"
 serde_json = "1.0.63"

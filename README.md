@@ -27,6 +27,7 @@ Commands
 - Python 3.6+
 
 ### TODO:
+- [ ] Fix gcc errors
 - [ ] Compile external files
 - [ ] Add imports
 - [ ] Add types
