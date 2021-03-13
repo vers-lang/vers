@@ -43,7 +43,7 @@ pub(crate) fn compile_lib(name: &str) {
 pub(crate) unsafe fn compile_exe(name: &str) {
     set_current_dir("build/internal/");
     println!("{}", PROJECT_NAME);
-    let name = format_args!("{}{}", "../", PROJECT_NAME).to_string();
+    let name = format_args!("{}{}", "../", "main").to_string();
     Command::new("gcc")
         .arg("main.o")
         .arg("-o")

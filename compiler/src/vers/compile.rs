@@ -6,6 +6,7 @@ use crate::PROJECT_TYPE;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read, Write};
 use std::ptr::replace;
+use crate::vers::syntax::check_type;
 
 static mut LAST_KNOWN_WORD: &str = "";
 static mut ASM_LINE: &str = "";
@@ -35,6 +36,8 @@ pub(crate) unsafe fn compile_vers() {
                 LAST_KNOWN_WORD = "extern";
             } else if word == "asm" {
                 LAST_KNOWN_WORD = "asm";
+            } else if word == "const" {
+                LAST_KNOWN_WORD = "constantname";
             }
             // Compiler functions
             else if word.contains("il_asm") {
@@ -52,17 +55,22 @@ pub(crate) unsafe fn compile_vers() {
                 }
                 LAST_KNOWN_WORD = "";
             } else if LAST_KNOWN_WORD == "extern" {
-                asm_file.write_fmt(format_args!("{} {}", EXTERN, word.replace(";", "").as_str()));
+                asm_file.write_fmt(format_args!("{} {}{}", EXTERN, word.replace(";", "").as_str(), "\n"));
                 LAST_KNOWN_WORD = "";
             } else if LAST_KNOWN_WORD == "il_asm" {
                 if word.contains("');") {
                     let asm = il_asm(word);
-                    asm_file.write_fmt(format_args!("{}{}", asm, "\n"));
+                    asm_file.write_fmt(format_args!("{}{}{}", " ", asm, "\n"));
                     LAST_KNOWN_WORD = " ";
                 } else {
                     let asm = il_asm(word);
                     asm_file.write_fmt(format_args!("{}{}", " ", asm));
                 }
+            } else if LAST_KNOWN_WORD == "constantname" {
+                asm_file.write_fmt(format_args!("{}{}{}", "\n", word, "\n"));
+                LAST_KNOWN_WORD = "constname";
+            } else if LAST_KNOWN_WORD == "constname" {
+                asm_file.write_fmt(format_args!("{}", check_type(word)));
             }
             // Ignore
             else if word == "{" || word == "}" {
