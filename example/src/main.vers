@@ -1,3 +1,5 @@
+const first_int_ever: int = 1;
+
 fun main() {
     il_asm('hlt ');
 }

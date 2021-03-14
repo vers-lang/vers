@@ -1,4 +1,4 @@
-use super::asm::{asm::*};
+use super::asm::*;
 use crate::functions::*;
 use crate::messages::errors::compiler_error;
 use crate::messages::messages::*;
@@ -28,7 +28,7 @@ pub(crate) unsafe fn compile_vers() {
     for line in reader.lines() {
         for mut word in line.unwrap().split_whitespace() {
             // For debugging
-            println!("word = {}\nLAST_UKNOWN_WORD = {}", word, LAST_KNOWN_WORD);
+            //println!("word = {}\nLAST_UKNOWN_WORD = {}", word, LAST_KNOWN_WORD);
             // word
             if word == "fun" {
                 LAST_KNOWN_WORD = "fun";

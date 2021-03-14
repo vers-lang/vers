@@ -1,47 +1,52 @@
-use crate::messages::compiler_message;
-use crate::PROJECT_TYPE;
-use std::fs::copy;
-use std::process::Command;
+use crate::messages::{compiler_message, messages::*, warnings::compiler_warning};
+use crate::{EXTERNAL_FILES, PROJECT_NAME, PROJECT_TYPE};
+use libc::sync;
+use std::env::set_current_dir;
+use std::fs::rename;
+use std::process::{Command};
+
+pub(crate) unsafe fn compile_asm() {
+	compiler_message("Compiling ", "internal ", "files...");
+	compile_internal();
+	println!("External files: {}", EXTERNAL_FILES);
+	if EXTERNAL_FILES == true {
+		compile_external();
+	} else { /* nothing */ }
+	link();
+}
+
+fn compile_internal() {
+	set_current_dir("build/internal/");
+	Command::new("pwd")
+		.spawn();
+	Command::new("gcc")
+		.arg("-c")
+		.arg("main.S")
+		.spawn();
+}
+
+fn compile_external() {
+	compiler_message("Compiling ", "external ", "files...");
+	set_current_dir("build/external/");
+	Command::new("pwd")
+		.spawn();
+}
 
 fn link() {
-    compiler_message("Linking ", "internal, external, ", "and imports...");
-    Command::new("gcc")
-    .arg("-c")
-    .arg("build/external/*.o")
-		.arg("build/imports/*")
-		.arg("build/internal/*.o")
-		.arg("-o")
-		.arg("build/link")
-.spawn();
+
 }
 
-fn exe() {
-	compiler_message("Compiling,", "exe...", "");
-	// Compile link to executable file (.exe)"
+pub(crate) fn compile_lib(name: &str) {
+
+}
+
+pub(crate) unsafe fn compile_exe(name: &str) {
+	set_current_dir("build/internal/");
+	println!("{}", PROJECT_NAME);
+	let name = format_args!("{}{}", "../", "main").to_string();
 	Command::new("gcc")
-		.arg("build/link")
+		.arg("main.o")
 		.arg("-o")
-		.arg("build/link.exe")
+		.arg(name.as_str())
 		.spawn();
-	copy("build/link.exe", "build/link");
-}
-
-fn lib() {
-	compiler_message("Compiling ", "lib...", "");
-	// Compile link to library (.a)
-	Command::new("ar")
-		.arg("rcs")
-		.arg("build/libproject.a")
-		.arg("build/link")
-		.spawn();
-}
-
-pub(crate) unsafe fn finish_compiling() {
-	link();
-	if PROJECT_TYPE == "exe" {
-		exe();
-	} else if PROJECT_TYPE == "lib" {
-		lib();
-	} else { exe(); }
-	compiler_message("Done ", "compiling", "");
 }
