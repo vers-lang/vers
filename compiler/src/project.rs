@@ -1,5 +1,5 @@
 use crate::{exe, exit_compiler, lib, PROJECT_TYPE, PROJECT_NAME, set_project_name};
-use crate::messages::{compiler_message, errors::compiler_error, messages::*};
+use crate::messages::{compiler_message, errors::{compiler_error, error}, messages::*};
 use serde_json::{from_reader, Value};
 use std::fs::{File};
 use std::path::Path;
@@ -13,7 +13,7 @@ unsafe fn exists() {
     if Path::new("project.json").exists() {
         SCORE = SCORE + 1;
     } else {
-        compiler_error(E1V);
+        error(E1V);
     }
 }
 
@@ -56,7 +56,7 @@ unsafe fn project_info() {
     if Path::new("project.json").exists() {
         project_type();
     } else {
-        compiler_error(E1V);
+        error(E1V);
     }
 }
 
@@ -64,7 +64,7 @@ unsafe fn files_exist() {
     if Path::new("src/main.vers").exists() {
         SCORE = SCORE + 1;
     } else {
-        compiler_error(E2V);
+        error(E2V);
         exit_compiler();
     }
 }

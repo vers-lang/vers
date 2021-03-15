@@ -1,4 +1,5 @@
 #![feature(fmt_as_str)]
+#![feature(option_result_contains)]
 // Imports
 #[macro_use]
 extern crate colour;
@@ -17,7 +18,7 @@ mod vers;
 
 // Compiler
 use messages::{compiler_message, errors, ERRORS, messages::*, warnings, WARNINGS};
-use crate::messages::errors::compiler_error;
+use crate::messages::errors::{compiler_error, error};
 use crate::messages::warnings::compiler_warning;
 use core::fmt::Arguments;
 use vers::{asm, compile, finish::*};
@@ -56,7 +57,7 @@ fn compiler_init() {
 
 pub(crate) unsafe fn exit_compiler() {
     println!("\nExit with:");
-    compiler_error(format_args!("{}{}{}", ERRORS, " Errors", "\n").to_string().as_str());
+    error(format_args!("{}{}{}", ERRORS, " Errors", "\n").to_string().as_str());
     compiler_warning(format_args!("{}{}{}", WARNINGS, " Warnings", "\n").to_string().as_str());
     print!("\n");
     exit(0);

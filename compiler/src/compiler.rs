@@ -1,4 +1,4 @@
-use crate::messages::{compiler_message, errors::compiler_error, ERRORS, messages::*, warnings::compiler_warning, WARNINGS};
+use crate::messages::{compiler_message, errors::{compiler_error, error}, ERRORS, messages::*, warnings::compiler_warning, WARNINGS};
 use crate::project::{project_name};
 use std::fs::{create_dir, File, remove_dir};
 use std::env::{consts::{ARCH, OS}};
@@ -12,7 +12,7 @@ unsafe fn check_arch() {
     if ARCH == "x86" || ARCH == "x86_64" {
         SCORE = SCORE + 1;
     } else {
-        compiler_error(E1H);
+        error(E1H);
         ERRORS = ERRORS + 1;
     }
 }
@@ -23,10 +23,10 @@ unsafe fn check_os() {
     } else if OS == "macos" {
         compiler_warning(W1O);
     } else if OS == "windows" {
-        compiler_error(E1O);
+        error(E1O);
         exit_compiler();
     } else {
-        compiler_error(E2O);
+        error(E2O);
         compiler_message("If your OS isn't", "windows", "and you're seeing this message:\n    Go to https://github.com/vers-lang/vers/ and make an issue about your OS not being supported.")
     }
 }
