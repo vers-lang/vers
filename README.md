@@ -27,11 +27,11 @@ Commands
 - Python 3.6+
 
 ### TODO:
-- [ ] Fix gcc errors
+- [x] Fix gcc errors
 - [ ] Compile external files
 - [ ] Add imports
 - [ ] Add types
 - [ ] Make proper way of calling external functions
 - [ ] Write documentation
-- [x] Add install command (for libraries)
+- [ ] Add install command (for libraries)
 - [ ] Make support for arm32 and aarch64(arm64)

@@ -3,3 +3,9 @@ name = "cli"
 version = "0.1.0"
 authors = ["The Vers developers"]
 edition = "2018"
+
+[build-dependencies]
+cc = "1.0.67"
+
+[dependencies]
+libc = "0.2.89"
