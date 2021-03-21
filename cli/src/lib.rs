@@ -1,6 +1,6 @@
 #![feature(fmt_as_str)]
 
-extern crate git_rs;
+extern crate git_management;
 extern crate libc;
 
 pub mod help;

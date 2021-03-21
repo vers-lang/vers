@@ -4,6 +4,7 @@
 #[macro_use]
 extern crate colour;
 
+extern crate alloc;
 extern crate libc;
 extern crate serde_json;
 

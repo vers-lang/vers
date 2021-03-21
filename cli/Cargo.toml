@@ -5,5 +5,5 @@ authors = ["The Vers developers"]
 edition = "2018"
 
 [dependencies]
-git-rs = { git = "https://github.com/NathanMcMillan54/git_rs/" }
+git_management = "0.1.1"
 libc = "0.2.89"

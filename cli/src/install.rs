@@ -1,4 +1,4 @@
-use git_rs::Git;
+use git_management::GitCommands;
 use std::io::{Write, stdin, stdout};
 use std::process::Command;
 
@@ -25,6 +25,11 @@ pub fn main() {
     print!("Library version: ");
     let version = input();
     println!("Installing {} from {}...", name, GITHUB);
-    Git::clone(GITHUB, author.as_str(), format_args!("{}{}", "/", name).to_string().as_str());
-    Git::checkoutt(name.as_str(), version.as_str());
+    GitCommands::clone(GITHUB, author.as_str(), name.as_str());
+    println!("Sudo password is needed to add library");
+    Command::new("sudo")
+        .arg("mv")
+        .arg(name.as_str())
+        .arg("~/.vers/")
+        .spawn();
 }
