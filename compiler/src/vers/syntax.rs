@@ -10,13 +10,13 @@ pub(crate) fn check_for_semicolon(line_num: i32, word: &str) -> bool {
     }
 }
 
-pub(crate) fn check_type(line_num: i32, typen: &str) -> &str {
+pub(crate) fn check_type(typen: &str) -> &str {
     if typen == "char" {
         CHAR
     } else if typen == "int" {
         INT
     } else {
-        compiler_error(line_num, E5V, format_args!("{}", typen));
+        // compiler_error(line_num, E5V, format_args!("{}", typen));
         return "";
     }
 }

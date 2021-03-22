@@ -4,6 +4,7 @@ pub const E2V: &'static str = "E2V: Cannot find project main file (main.vers/lib
 pub const E3V: &'static str = "E3V: Unknown instruction\n";
 pub const E4V: &'static str = "E4V: Missing semicolon\n";
 pub const E5V: &'static str = "E5V: Unknown type\n";
+pub const E6V: &'static str = "E6V: Illegal function name, certain characters cannot be used in function names\n";
 
 // Vers warnings
 pub const W1V: &'static str = "W1V: Cannot read project.json file\n";
