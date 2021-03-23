@@ -1,3 +1,5 @@
+const first_vers_constant char "Test";
+
 fun main() {
     il_asm('ret ');
 }

@@ -1,11 +1,12 @@
 use crate::arch::*;
 use crate::messages::{errors::compiler_error, messages::*};
+use crate::vers::compile::LINE_NUMBER;
 
-pub(crate) fn check_for_semicolon(line_num: i32, word: &str) -> bool {
+pub(crate) fn check_for_semicolon(word: &str) -> bool {
     if word.contains(";") {
         return true;
     } else {
-        compiler_error(line_num, E4V, format_args!("{}", ""));
+        unsafe { compiler_error(LINE_NUMBER, E4V, format_args!("{}", "")) }
         return false;
     }
 }
@@ -16,7 +17,7 @@ pub(crate) fn check_type(typen: &str) -> &str {
     } else if typen == "int" {
         INT
     } else {
-        // compiler_error(line_num, E5V, format_args!("{}", typen));
+        unsafe { compiler_error(LINE_NUMBER, E5V, format_args!("{}", typen)) }
         return "";
     }
 }
