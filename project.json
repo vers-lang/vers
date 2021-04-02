@@ -1,9 +1,0 @@
-{
-  "name": "vers",
-  "version": "1.0.0",
-  "type": [
-    "exe",
-    "lib"
-  ],
-  "std": false
-}

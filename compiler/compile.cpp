@@ -6,6 +6,6 @@
 using namespace std;
 
 int compiler_main() {
-    compiler_message("Compiling vers...");
+    setup_project();
     return 0;
 }
