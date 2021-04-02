@@ -1,33 +1,34 @@
-USER_NAME = $USER
+OBJECT = g++ -c
+BINARY = g++ -static -o ../vers
 
-all: clean dirs vers libs move
+all: setup clibs source vlcompiler bin
+
+setup:
+	@ rm -rf build/
+	@ mkdir build/
+
+clibs:
+	@ echo "Compiling C libraries from clib/..."
+	@ $(MAKE) -C clib/ all
+	@ $(MAKE) -C clib/ move
+
+source:
+	@ echo "Compiling src/..."
+	@ $(MAKE) -C src/ all
+	@ $(MAKE) -C src/ move
+
+vlcompiler:
+	@ echo "Compiling compiler/..."
+	@ $(MAKE) -C compiler/ all
+	@ $(MAKE) -C compiler/ move
+
+bin:
+	@ echo "Creating Vers command..."
+	@ cd build/ && $(BINARY) *.o
 
 clean:
-	@ echo "Cleaning root directory of Vers files and directorires..."
-	@ sudo rm -rf /bin/vers
-	@ sudo rm -rf ~/.vers/
-	@ sudo rm -rf /lib/vers/
-	@ echo "Cleaning project directory..."
-	@ rm -rf example/build/
-	@ rm -rf lib/std/build/
-	@ rm -rf target/
-	@ echo "Done"
-
-dirs:
-	@ sudo mkdir /lib/vers
-	@ sudo mkdir /lib/vers/tools
-	@ sudo mkdir /lib/vers/vers
-	@ sudo mkdir ~/.vers/
-
-vers:
-	@ echo "Compiling the Vers compiler, language, and stdlib..."
-	@ cargo build
-	@ sudo mv target/debug/vers /bin/vers
-
-libs:
-	@ echo "Compiling Vers stdlib"
-	@ cd lib/ && make all
-
-move:
-	@ echo "Moving binaries and libraries..."
-	@ sudo cp -r version /lib/vers/vers/version
+	@ rm -rf build/
+	@ rm -rf vers
+	@ $(MAKE) -C clib/ clean
+	@ $(MAKE) -C compiler/ clean
+	@ $(MAKE) -C src/ clean

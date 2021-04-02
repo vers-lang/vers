@@ -1,9 +1,0 @@
-[package]
-name = "cli"
-version = "0.1.0"
-authors = ["The Vers developers"]
-edition = "2018"
-
-[dependencies]
-git_management = "0.1.1"
-libc = "0.2.89"

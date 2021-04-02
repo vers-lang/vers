@@ -1,5 +1,0 @@
-const first_vers_constant int 5;
-
-fun main() {
-    il_asm('ret ');
-}
