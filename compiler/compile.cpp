@@ -7,5 +7,6 @@ using namespace std;
 
 int compiler_main() {
     setup_project();
+    translate_vers();
     return 0;
 }

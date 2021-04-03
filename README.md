@@ -18,16 +18,16 @@ Compiling
 
 ---
 
+- g++ 9.3.0+
 - Rustc 1.49+
 
-Commands
+Libraries
 
----  
+---
 
-- Python 3.6+
+- Boost 1.75.0+
 
 ### TODO:
-- [x] Fix gcc errors
 - [ ] Compile external files
 - [ ] Add imports
 - [ ] Add types

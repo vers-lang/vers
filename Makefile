@@ -32,3 +32,8 @@ clean:
 	@ $(MAKE) -C clib/ clean
 	@ $(MAKE) -C compiler/ clean
 	@ $(MAKE) -C src/ clean
+
+requirements:
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get install libboost-all-dev

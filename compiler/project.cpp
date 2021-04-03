@@ -1,6 +1,7 @@
 #include "../clib/messages.h"
 #include <iostream>
 #include <fstream>
+#include <unistd.h>
 #include "project.h"
 #include <string>
 #include <sys/stat.h>
@@ -17,6 +18,7 @@ int build_dir() {
 }
 
 int setup_project() {
+    rmdir("build/");
     ifstream project_file("project.txt");
     string line;
     int line_num;
@@ -30,9 +32,8 @@ int setup_project() {
             }
         }
     }
-    string msg = "Compiling " + project_name + "...\n";
-    compiler_message(msg);
-    compiler_message("Creating build directory...\n");
+    compiler_message("Compiling " + project_name + "...");
+    compiler_message("    Creating build directory...");
     build_dir();
     return 0;
 }
