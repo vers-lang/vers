@@ -22,7 +22,7 @@ string replace_str(string full_string, string replace1, string replace2, string 
     return full_string;
 }
 
-string replace_str4(string full_string, string replace1, string replace2, string replace3, string replace4, string replace_with) {
+string replace_str4(string full_string, string replace1, string replace2, string replace3, char replace4, string replace_with) {
     // Clear replace1 in full_string
     while (full_string.find(replace1) != string::npos) {
         full_string.replace(full_string.find(replace1), 3, replace_with);
