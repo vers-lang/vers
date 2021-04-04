@@ -2,11 +2,13 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include "project.h"
 #include <string>
 #include <sys/stat.h>
 
 using namespace std;
+
+string project_name = "";
+string project_type = "";
 
 int build_dir() {
     mkdir("build/", 0777);
@@ -26,9 +28,9 @@ int setup_project() {
         while (getline(project_file, line)) {
             line_num = line_num + 1;
             if (line_num == 1) {
-                project_name = line.erase(0, 6);
+                project_name = line.erase(0, 6).c_str();
             } else if (line_num == 2) {
-                project_type = line.erase(0, 6);
+                project_type = line.erase(0, 6).c_str();
             }
         }
     }

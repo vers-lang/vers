@@ -20,3 +20,13 @@ string compiler_message(string message) {
     cout << green << message << clear << endl;
     return message;
 }
+
+string error(string message) {
+    cout << red << message << clear << endl;
+    return message;
+}
+
+string warning(string message) {
+    cout << yellow << message << clear << endl;
+    return message;
+}

@@ -8,5 +8,7 @@ using namespace std;
 extern "C++" string compiler_error(int line, string msg, string arg);
 extern "C++" string compiler_warning(int line, string msg, string arg);
 extern "C++" string compiler_message(string message);
+extern "C++" string error(string message);
+extern "C++" string warning(string message);
 
 #endif //VERS_MESSAGES_H
