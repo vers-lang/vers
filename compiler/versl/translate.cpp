@@ -10,22 +10,6 @@
 using namespace boost;
 using namespace std;
 
-string check_type(string variable, int line_num) {
-    string vtype = "";
-    if (variable.find("str")) {
-        cout << "Str variable" << endl;
-        vtype = "\n    " + str;
-        variable = replace_str(variable, "str", "", "", vtype);
-    } else if (variable.find("int")) {
-        cout << "Int variable" << endl;
-        vtype = "\n    " + inte;
-        variable = replace_str(variable, "int", "", "", vtype);
-    } else {
-        compiler_error(line_num, " not type\n", "Use int for number values, and use str for string values\n");
-    }
-    return variable;
-}
-
 int translate_vers() {
     compiler_message("    Translating Vers...");
     int line_num = 0;
@@ -40,22 +24,22 @@ int translate_vers() {
         boost::erase_all(vline, "}");
 
         if (!vline.find("fun")) {
-            // string function = create_function(vline);
             string function = replace_str(vline, "fun", "()", "{", "");
             trim(function);
             asm_file << function + fun << endl;
         } else if (!vline.find("extern")) {
             string extern_function = replace_str(vline, "extern", ";", "", "");
             asm_file << external + extern_function << endl;
-        } else if (!vline.find("var")) {
+        } /* else if (!vline.find("var")) {
             string variable = replace_str(vline, "var", "=", ";", "");
             variable = check_type(variable, line_num);
             asm_file << variable + "\n" << endl;
-        } else if (vline.find("il_asm")) {
-            // Trim line and write it to assembly file
+        } */ else if (vline.find("il_asm")) {
             asm_file << il_asm(vline) << endl;
+        } else if (!vline.find("import")) {
+            asm_file << "This is text and stuff \n ya" << endl;
         } else {
-            compiler_error(line_num, "Unknown instruction\n", "Probably misspelled or dosn't exist");
+            compiler_error(line_num, "Unknown instruction\n", "Probably misspelled or doesn't exist");
         }
     }
     return 0;

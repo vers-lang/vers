@@ -11,5 +11,6 @@ string call = "call";
 string dec_main = ".globl main";
 string str = ".ascii";
 string inte = ".byte";
+string import = "#include";
 
 #endif //VERS_X86_64_H
