@@ -1,0 +1,11 @@
+[package]
+name = "versc"
+version = "0.1.0"
+authors = ["Nathan McMillan <nathanmcmillan54@gmail.com>"]
+
+[[bin]]
+name = "versc"
+edition = "2018"
+path = "src/main.rs"
+
+[dependencies]

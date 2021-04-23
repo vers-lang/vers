@@ -1,3 +1,0 @@
-void compile_lib() {
-
-}

@@ -1,4 +1,0 @@
-Name: example
-Type: exe
-Version: 0.1.0
-Std: true
