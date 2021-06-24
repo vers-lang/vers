@@ -3,7 +3,7 @@
 #[macro_use] extern crate colour;
 
 use std::env;
-use std::fs::File;
+use std::fs::{File, remove_file};
 use std::path::Path;
 use std::process::{exit, Command};
 use std::io::Write;
@@ -14,6 +14,7 @@ mod types;
 use c::translate_to_c;
 
 pub static mut OUTPUT: String = String::new();
+pub static mut ERRORS: bool = false;
 
 fn create_output_file(file: &String) -> File {
     let mut create_file = File::create(file.replace(".vers", "")).unwrap();
@@ -38,7 +39,11 @@ fn main() {
     unsafe {
         translate_to_c(file);
         out_put_file.write_fmt(format_args!("{}", OUTPUT));
-        println!("C equivalent:\n{}", OUTPUT);
+
+        if ERRORS == true {
+            red_ln!("Did not compile successfully");
+            remove_file(file.replace(".vers", ""));
+        }
     }
 
     exit(0);
