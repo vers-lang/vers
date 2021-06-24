@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-use crate::types::Action;
 use crate::{ERRORS, OUTPUT};
 
 pub(crate) unsafe fn translate_to_c(vers_file: &String) {
@@ -21,9 +20,11 @@ pub(crate) unsafe fn translate_to_c(vers_file: &String) {
 
         if in_fun {
             if !vers_line.contains("{") {
-                if !vers_line.contains(";") {
-                    ERRORS = true;
-                    red_ln!("Line: {} needs a semicolon", lines);
+                if !vers_line.trim().is_empty() {
+                    if !vers_line.contains(";") {
+                        ERRORS = true;
+                        red_ln!("Line: {} needs a semicolon", lines);
+                    }
                 }
             }
         }

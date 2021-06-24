@@ -9,7 +9,6 @@ use std::process::{exit, Command};
 use std::io::Write;
 
 mod c;
-mod types;
 
 use c::translate_to_c;
 
