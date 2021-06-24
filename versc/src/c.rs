@@ -11,24 +11,23 @@ pub(crate) unsafe fn translate_to_c(vers_file: &String) {
         lines = lines + 1;
         let mut vers_line = line.unwrap();
 
-        vers_line = vers_line.replace("fun", "void").replace("var: int", "int").replace("var: string", "char[99999]");
+        vers_line = vers_line.replace("fun", "void").replace("var: int", "int").replace("var: string", "char[99999]").replace("external", "extern");
         if vers_line.contains("{") {
             in_fun = true;
         } else if vers_line.contains("}") {
             in_fun = false;
         }
 
-        if in_fun {
-            if !vers_line.contains("{") {
-                if !vers_line.trim().is_empty() {
-                    if !vers_line.contains(";") {
-                        ERRORS = true;
-                        red_ln!("Line: {} needs a semicolon", lines);
-                    }
+        if !vers_line.contains("{") {
+            if !vers_line.trim().is_empty() {
+                if !vers_line.contains(";") {
+                    ERRORS = true;
+                    red_ln!("Line: {} needs a semicolon", lines);
                 }
             }
         }
 
         OUTPUT.push_str(vers_line.as_str());
+        OUTPUT.push_str("\n");
     }
 }

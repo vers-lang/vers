@@ -15,8 +15,8 @@ use c::translate_to_c;
 pub static mut OUTPUT: String = String::new();
 pub static mut ERRORS: bool = false;
 
-fn create_output_file(file: &String) -> File {
-    let mut create_file = File::create(file.replace(".vers", "")).unwrap();
+fn create_c_output_file(file: &String) -> File {
+    let mut create_file = File::create(file.replace(".vers", ".c")).unwrap();
     return create_file;
 }
 
@@ -34,7 +34,7 @@ fn main() {
         red_ln!("Error: Cannot find {:?}, check if it exists or you've used the right argument", file);
     }
 
-    let mut out_put_file = create_output_file(file);
+    let mut out_put_file = create_c_output_file(file);
     unsafe {
         translate_to_c(file);
         out_put_file.write_fmt(format_args!("{}", OUTPUT));
@@ -44,6 +44,9 @@ fn main() {
             remove_file(file.replace(".vers", ""));
         }
     }
+
+    let c_file_name = file.to_string().replace(".vers", ".c");
+    remove_file(Path::new(c_file_name.as_str()));
 
     exit(0);
 }

@@ -1,0 +1,5 @@
+external fun printf(const char fmt);
+
+fun main() {
+    printf("Hello, world!\n");
+};
