@@ -27,6 +27,8 @@ pub(crate) unsafe fn translate_to_c(vers_file: &String) {
             }
         }
 
+        vers_line = vers_line.replace("};", "}");
+
         OUTPUT.push_str(vers_line.as_str());
         OUTPUT.push_str("\n");
     }

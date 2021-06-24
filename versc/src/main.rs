@@ -9,8 +9,10 @@ use std::process::{exit, Command};
 use std::io::Write;
 
 mod c;
+mod compile;
 
 use c::translate_to_c;
+use compile::{_e, _l};
 
 pub static mut OUTPUT: String = String::new();
 pub static mut ERRORS: bool = false;
@@ -32,6 +34,7 @@ fn main() {
 
     if !Path::new(file).exists() {
         red_ln!("Error: Cannot find {:?}, check if it exists or you've used the right argument", file);
+        exit(0);
     }
 
     let mut out_put_file = create_c_output_file(file);
@@ -45,8 +48,17 @@ fn main() {
         }
     }
 
-    let c_file_name = file.to_string().replace(".vers", ".c");
-    remove_file(Path::new(c_file_name.as_str()));
+
+
+    if option == &String::from("-e") {
+        let c_file_name = file.to_string().replace(".vers", ".c");
+        let output = file.to_string().replace(".vers", "");
+        _e(output, c_file_name);
+    } else if option == &String::from("-l") {
+        let c_file_name = file.to_string().replace(".vers", ".c");
+        let output = file.to_string().replace(".vers", "");
+        _l(output, c_file_name);
+    }
 
     exit(0);
 }

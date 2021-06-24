@@ -1,4 +1,4 @@
-external fun printf(const char fmt);
+external fun printf(const char *fmt);
 
 fun main() {
     printf("Hello, world!\n");
