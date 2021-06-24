@@ -1,87 +1,45 @@
+#![feature(stmt_expr_attributes)]
+
+#[macro_use] extern crate colour;
+
 use std::env;
-use std::fmt::Arguments;
-use std::fs::{remove_file, File};
-use std::io::{BufRead, BufReader, Write};
+use std::fs::File;
 use std::path::Path;
 use std::process::{exit, Command};
+use std::io::Write;
 
-static mut ASM: String = String::new();
+mod c;
+mod types;
 
-fn make_globl_functions(vers: File) -> String {
-    let reader = BufReader::new(vers);
-    let mut globl_functions = String::new();
-    for (mut line, mut vers_line) in reader.lines().enumerate() {
-        let mut vers_line = vers_line.unwrap();
-        if vers_line.contains("fun") {
-            let fun_len = vers_line.len();
-            // Remove "() {"
-            vers_line.truncate(fun_len - 4);
-            vers_line = vers_line.replace("fun ", "");
-            globl_functions.push_str(format_args!(".globl {}\n.type {} @function\n", vers_line, vers_line).to_string().as_str());
-        }
-        line = line + 1;
-    }
-    return globl_functions;
-}
+use c::translate_to_c;
 
-fn make_function(vers: String) -> String {
-    let mut function = String::new();
-    let fun_len = function.len();
-    function.truncate(fun_len - 4);
-    function = vers.replace("fun", "");
-    return function;
-}
+pub static mut OUTPUT: String = String::new();
 
-fn generate_assembly(mut vers_file: &String) {
-    println!("Generating assembly...");
-    // Setup
-    let file = File::open(vers_file).unwrap();
-    let asm_file_name = vers_file.replace(".vers", ".S");
-    let mut asm_file = File::create(asm_file_name).unwrap();
-    let functions = make_globl_functions(file.try_clone().unwrap());
-    unsafe { ASM.push_str(&*functions); }
-    // Main loop
-    let mut vers_reader = BufReader::new(file);
-    for (mut line_num, mut vers_line) in vers_reader.lines().enumerate() {
-        let vers_line = vers_line.unwrap();
-        if vers_line.contains("fun") {
-            let fun = make_function(vers_line);
-            println!("Function name: {}", fun);
-            unsafe {
-                ASM.push_str("\n");
-                ASM.push_str(&*fun);
-                ASM.push_str(":\n");
-            }
-        } else {
-            println!("Unknown instruction: {}", vers_line);
-        }
-    }
-
-    unsafe { println!("Writing:\n{}", ASM); }
-    unsafe { asm_file.write_fmt(format_args!("{}", ASM)); }
+fn create_output_file(file: &String) -> File {
+    let mut create_file = File::create(file.replace(".vers", "")).unwrap();
+    return create_file;
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let file = &args[1];
-    let option = &args[2];
-    if !Path::exists(file.as_ref()) {
-        println!("{} - File doesn't exist", file);
+    let option = &args[1];
+    let file = &args[2];
+
+    if option != &String::from("-e") && option != &String::from("-l") {
+        red_ln!("Error: {:?} is not an option, use -e or -l option", option);
         exit(0);
     }
 
-    let mut asm_file_name = file.replace(".vers", ".S");
-    File::create(asm_file_name);
-    generate_assembly(&file.clone());
+    if !Path::new(file).exists() {
+        red_ln!("Error: Cannot find {:?}, check if it exists or you've used the right argument", file);
+    }
 
-    let output_asm_file = file.replace(".vers", ".S");
-    let output_file_name = file.replace(".vers", "");
-
-    Command::new("gcc")
-        .arg(output_asm_file)
-        .arg("-o")
-        .arg(output_file_name)
-        .spawn();
+    let mut out_put_file = create_output_file(file);
+    unsafe {
+        translate_to_c(file);
+        out_put_file.write_fmt(format_args!("{}", OUTPUT));
+        println!("C equivalent:\n{}", OUTPUT);
+    }
 
     exit(0);
 }

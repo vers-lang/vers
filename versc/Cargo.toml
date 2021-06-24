@@ -9,3 +9,4 @@ edition = "2018"
 path = "src/main.rs"
 
 [dependencies]
+colour = "0.6.0"

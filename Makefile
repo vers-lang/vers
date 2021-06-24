@@ -3,5 +3,5 @@ all: compiler
 compiler:
 	@ $(MAKE) -C versc/ all
 
-dev:
+dev: all
 	@ mv versc/target/debug/versc example/versc
