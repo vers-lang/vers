@@ -49,7 +49,6 @@ fn main() {
     }
 
 
-
     if option == &String::from("-e") {
         let c_file_name = file.to_string().replace(".vers", ".c");
         let output = file.to_string().replace(".vers", "");
@@ -59,6 +58,8 @@ fn main() {
         let output = file.to_string().replace(".vers", "");
         _l(output, c_file_name);
     }
+
+    green_ln!("Compiled successfully");
 
     exit(0);
 }
