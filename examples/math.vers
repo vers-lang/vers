@@ -1,0 +1,9 @@
+external fun printf(const char *fmt, ...);
+
+fun main() {
+    var: int i = 5;
+    var: int j = 10;
+    var: int x = i + j;
+
+    printf("i + j = x | x = 10 + 5\nx = %d\n", x);
+};

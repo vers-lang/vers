@@ -1,0 +1,6 @@
+external fun printf(const char *fmt, ...);
+
+fun main() {
+    var: string myString = "A string!";
+    printf("%s\n", myString);
+};
