@@ -11,7 +11,7 @@ pub(crate) unsafe fn translate_to_c(vers_file: &String) {
         lines = lines + 1;
         let mut vers_line = line.unwrap();
 
-        vers_line = vers_line.replace("fun", "void").replace("var: int", "int").replace("var: string ", "char *").replace("external", "extern");
+        vers_line = vers_line.replace("fun", "void").replace("var: int", "int").replace("var: string ", "char *").replace("external", "extern").replace("var: char", "char");
         if vers_line.contains("{") {
             in_fun = true;
         } else if vers_line.contains("}") {

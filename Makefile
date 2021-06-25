@@ -1,7 +1,10 @@
-all: compiler
+all: compiler examples
 
 compiler:
 	@ $(MAKE) -C versc/ all
 
-dev: all
-	@ mv versc/target/debug/versc example/versc
+examples:
+	@ versc -e examples/hello.vers
+	@ versc -e examples/math.vers
+	@ versc -e examples/string.vers
+
