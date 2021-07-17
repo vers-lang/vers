@@ -2,11 +2,18 @@
 name = "versc"
 version = "0.1.0"
 authors = ["Nathan McMillan <nathanmcmillan54@gmail.com>"]
+edition = "2018"
 
 [[bin]]
 name = "versc"
 edition = "2018"
 path = "src/main.rs"
 
+[lib]
+name = "versc_lib"
+edition = "2018"
+path = "src/lib.rs"
+
 [dependencies]
 colour = "0.6.0"
+nom = "7.0.0-alpha1"

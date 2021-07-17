@@ -1,65 +1,74 @@
-#![feature(stmt_expr_attributes)]
-
 #[macro_use] extern crate colour;
+extern crate versc_lib;
 
-use std::env;
-use std::fs::{File, remove_file};
+use std::env::args;
+use std::fs::{File};
+use std::io::{BufReader, BufRead};
 use std::path::Path;
-use std::process::{exit, Command};
-use std::io::Write;
+use std::process::exit;
 
-mod c;
-mod compile;
+use versc_lib::syntax::{check_line, SYMBOLS};
 
-use c::translate_to_c;
-use compile::{_e, _l};
+fn check_syntax(file: File) -> i32 {
+    let mut reader = BufReader::new(file);
+    let mut line = 0;
+    let mut errors = 0;
 
-pub static mut OUTPUT: String = String::new();
-pub static mut ERRORS: bool = false;
+    for code in reader.lines() {
+        line = line + 1;
+        let mut vers_line = code.unwrap();
 
-fn create_c_output_file(file: &String) -> File {
-    let mut create_file = File::create(file.replace(".vers", ".c")).unwrap();
-    return create_file;
-}
+        for i in 0..2 {
+            if vers_line.starts_with(SYMBOLS[i]) {
+                println!("\tVers line starts with {}", SYMBOLS[i]);
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let option = &args[1];
-    let file = &args[2];
+                if vers_line.contains("()") {
 
-    if option != &String::from("-e") && option != &String::from("-l") {
-        red_ln!("Error: {:?} is not an option, use -e or -l option", option);
-        exit(0);
-    }
+                }
+            }
 
-    if !Path::new(file).exists() {
-        red_ln!("Error: Cannot find {:?}, check if it exists or you've used the right argument", file);
-        exit(0);
-    }
-
-    let mut out_put_file = create_c_output_file(file);
-    unsafe {
-        translate_to_c(file);
-        out_put_file.write_fmt(format_args!("{}", OUTPUT));
-
-        if ERRORS == true {
-            red_ln!("Did not compile successfully");
-            remove_file(file.replace(".vers", ""));
+            if vers_line.ends_with("{") || vers_line.ends_with("}") || vers_line.ends_with(";") {
+                println!("\t{}: Vers line ends with the right character! {}", line, vers_line.chars().last().unwrap());
+            } else {
+                errors = errors + 1;
+            }
         }
     }
 
+    return errors;
+}
+
+fn main() {
+    let compiler_args: Vec<String> = args().collect();
+
+    let option = &compiler_args[1];
+    let file_name = &compiler_args[2];
+
+    let mut link = "exe";
 
     if option == &String::from("-e") {
-        let c_file_name = file.to_string().replace(".vers", ".c");
-        let output = file.to_string().replace(".vers", "");
-        _e(output, c_file_name);
+        link = "exe";
     } else if option == &String::from("-l") {
-        let c_file_name = file.to_string().replace(".vers", ".c");
-        let output = file.to_string().replace(".vers", "");
-        _l(output, c_file_name);
+        link = "lib";
+    } else {
+        red_ln!("{} is not a valid option, use \"-e\" or \"-l\"", option);
+        exit(0);
     }
 
-    green_ln!("Compiled successfully");
+    if !Path::new(&file_name).exists() {
+        red_ln!("{} cannot be found, check file path", file_name);
+        exit(0);
+    }
 
-    exit(0);
+    green_ln!("Compiling {}...", file_name);
+
+    let mut errors = check_syntax(File::open(&file_name).unwrap());
+
+    if errors == 0 {
+        green_ln!("\tNo errors found");
+        green_ln!("\tGenerating assembly...");
+    } else {
+        red_ln!("\tFound {} errors", errors);
+        red_ln!("\tWill not compile {}", file_name);
+    }
 }
