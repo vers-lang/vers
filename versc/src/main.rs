@@ -17,8 +17,9 @@ fn check_syntax(file: &String) -> i32 {
     for code in reader.lines() {
         line = line + 1;
         let mut vers_line = code.unwrap();
-
-        errors = errors + check_line(vers_line.as_str());
+        if !vers_line.trim().is_empty() {
+            errors = errors + check_line(vers_line.as_str());
+        }
     }
 
     return errors;
@@ -48,13 +49,12 @@ fn main() {
 
     green_ln!("Compiling {}...", file_name);
 
-    let mut errors = check_syntax(file_name);
+    let errors = check_syntax(file_name);
 
     if errors == 0 {
-        green_ln!("\tNo errors found");
-        green_ln!("\tGenerating assembly...");
+        green_ln!("No errors were found");
     } else {
-        red_ln!("\tFound {} errors", errors);
-        red_ln!("\tWill not compile {}", file_name);
+        red_ln!("Found: {} errors, will not compile", errors);
+        exit(0);
     }
 }
