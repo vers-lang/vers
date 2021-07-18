@@ -1,7 +1,7 @@
 // Symbols and punctuation
-const NUM_SYMBOLS: usize = 4;
+const NUM_SYMBOLS: usize = 5;
 const NUM_PUNCTUATION: usize = 5;
-pub const SYMBOLS: [&str; NUM_SYMBOLS] = ["fun", "external", "\"", "\""];
+pub const SYMBOLS: [&str; NUM_SYMBOLS] = ["fun", "external", "\"", "\"", "var:"];
 pub const PUNCTUATION: [&str; NUM_PUNCTUATION] = ["{", "}", ";", "(", ")"];
 
 // Is the symbol or punctuation recognized? (These statics were normal variables but kept getting reset.)

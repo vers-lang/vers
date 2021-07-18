@@ -5,9 +5,13 @@ use std::env::args;
 use std::fs::{read_to_string, File};
 use std::io::{BufReader, BufRead};
 use std::path::Path;
-use std::process::exit;
+use std::process::{exit, Command};
 
+use versc_lib::c::translate_to_c;
+use versc_lib::gcc::Gcc;
 use versc_lib::syntax::{check_line, SYMBOLS};
+
+static mut FILE: &'static str = "";
 
 fn check_syntax(file: &String) -> i32 {
     let mut reader = BufReader::new(File::open(file).unwrap());
@@ -30,6 +34,7 @@ fn main() {
 
     let option = &compiler_args[1];
     let file_name = &compiler_args[2];
+    let add_std = &compiler_args[3];
 
     let mut link = "exe";
 
@@ -47,6 +52,19 @@ fn main() {
         exit(0);
     }
 
+    let mut link_std = true;
+    let mut std_file = "";
+
+    if add_std == &String::from("std") {
+        link_std = true;
+        std_file = "~/.vers/vstd";
+    } else if add_std == &String::from("no-std") {
+        link_std = false;
+        std_file = "~/.vers/nvstd";
+    } else {
+        red_ln!("{} is not a valid option, use \"std\" or \"no-std\"");
+    }
+
     green_ln!("Compiling {}...", file_name);
 
     let errors = check_syntax(file_name);
@@ -56,5 +74,13 @@ fn main() {
     } else {
         red_ln!("Found: {} errors, will not compile", errors);
         exit(0);
+    }
+
+    translate_to_c(&file_name);
+
+    if link == "exe" {
+        Command::new("gcc")
+            .args(&["-Wall", "~/.vers/cstdlib", std_file, file_name.replace(".vers", ".c").as_str(), "-o", file_name.replace(".vers", "").as_str()])
+            .spawn();
     }
 }
