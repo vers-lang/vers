@@ -2,15 +2,15 @@
 extern crate versc_lib;
 
 use std::env::args;
-use std::fs::{File};
+use std::fs::{read_to_string, File};
 use std::io::{BufReader, BufRead};
 use std::path::Path;
 use std::process::exit;
 
 use versc_lib::syntax::{check_line, SYMBOLS};
 
-fn check_syntax(file: File) -> i32 {
-    let mut reader = BufReader::new(file);
+fn check_syntax(file: &String) -> i32 {
+    let mut reader = BufReader::new(File::open(file).unwrap());
     let mut line = 0;
     let mut errors = 0;
 
@@ -18,21 +18,7 @@ fn check_syntax(file: File) -> i32 {
         line = line + 1;
         let mut vers_line = code.unwrap();
 
-        for i in 0..2 {
-            if vers_line.starts_with(SYMBOLS[i]) {
-                println!("\tVers line starts with {}", SYMBOLS[i]);
-
-                if vers_line.contains("()") {
-
-                }
-            }
-
-            if vers_line.ends_with("{") || vers_line.ends_with("}") || vers_line.ends_with(";") {
-                println!("\t{}: Vers line ends with the right character! {}", line, vers_line.chars().last().unwrap());
-            } else {
-                errors = errors + 1;
-            }
-        }
+        errors = errors + check_line(vers_line.as_str());
     }
 
     return errors;
@@ -62,7 +48,7 @@ fn main() {
 
     green_ln!("Compiling {}...", file_name);
 
-    let mut errors = check_syntax(File::open(&file_name).unwrap());
+    let mut errors = check_syntax(file_name);
 
     if errors == 0 {
         green_ln!("\tNo errors found");
