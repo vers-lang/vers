@@ -1,5 +1,3 @@
-external fun printf(const var: char *fmt);
-
 fun main() {
-    printf("Hello, world!\n");
+    println("Hello, world!");
 };

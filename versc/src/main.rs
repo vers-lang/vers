@@ -1,6 +1,8 @@
 #[macro_use] extern crate colour;
 extern crate versc_lib;
 
+use whoami::username;
+
 use std::env::args;
 use std::fs::{read_to_string, File};
 use std::io::{BufReader, BufRead};
@@ -36,6 +38,8 @@ fn main() {
     let file_name = &compiler_args[2];
     let add_std = &compiler_args[3];
 
+    println!("Username: {}", username());
+
     let mut link = "exe";
 
     if option == &String::from("-e") {
@@ -47,22 +51,26 @@ fn main() {
         exit(0);
     }
 
+    let mut link_std = true;
+    let mut std_file = String::from("/home/");
+
     if !Path::new(&file_name).exists() {
         red_ln!("{} cannot be found, check file path", file_name);
         exit(0);
     }
 
-    let mut link_std = true;
-    let mut std_file = "";
 
     if add_std == &String::from("std") {
         link_std = true;
-        std_file = "~/.vers/vstd";
+        std_file.push_str(username().as_str());
+        std_file.push_str("/.vers/vstd");
     } else if add_std == &String::from("no-std") {
         link_std = false;
-        std_file = "~/.vers/nvstd";
+        std_file.push_str("");
+        std_file = "".to_string();
     } else {
-        red_ln!("{} is not a valid option, use \"std\" or \"no-std\"");
+        red_ln!("{} is not a valid option, use \"std\" or \"no-std\"", add_std);
+        exit(0);
     }
 
     green_ln!("Compiling {}...", file_name);
@@ -76,12 +84,12 @@ fn main() {
         exit(0);
     }
 
-    translate_to_c(&file_name);
+    translate_to_c(&file_name, link_std);
 
     if link == "exe" {
-        _e(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"));
+        _e(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"), std_file);
     } else if link == "lib" {
-        _l(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"));
+        _l(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"), std_file.to_string());
     } else {
         red_ln!("Unknown link option, can't compile");
     }

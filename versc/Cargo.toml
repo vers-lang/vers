@@ -17,3 +17,4 @@ path = "src/lib.rs"
 [dependencies]
 colour = "0.6.0"
 nom = "7.0.0-alpha1"
+whoami = "1.1.2"

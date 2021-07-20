@@ -1,7 +1,12 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead, Write};
 
-pub fn translate_to_c(vers_file: &String) {
+/* stdlib functions as external functions so you can call them easier
+ * this just breakes stuff but in the future this might help
+ * const STD_FUNCTIONS: &str = "extern fun pintln(var: string text);\nexternal fun square(var: int num);\n";
+ */
+
+pub fn translate_to_c(vers_file: &String, link_std: bool) {
     let mut reader = BufReader::new(File::open(vers_file).expect("Can't find Vers input file"));
     let mut lines = 0;
     let mut in_fun = false;

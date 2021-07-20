@@ -1,4 +1,4 @@
-all: compiler examples libs
+all: compiler libs examples
 
 compiler:
 	@ $(MAKE) -C versc/ all
