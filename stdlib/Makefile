@@ -3,6 +3,7 @@ all: clean deps build
 clean:
 	@ rm -rf libc/
 	@ rm -rf libc.vers.lib
+	@ rm -rf vstd
 
 deps:
 	@ echo "Compiling Vers LibC..."
@@ -11,4 +12,5 @@ deps:
 
 build:
 	@ echo "Compiling std..."
-
+	@ versc -e vstd.vers no-std
+	@ sudo mv vstd ~/.vers/vstd
