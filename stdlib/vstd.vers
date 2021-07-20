@@ -1,0 +1,10 @@
+external fun printf(var: string fmt, ...);
+
+fun println(var: string text) {
+    printf("%s\n", text);
+}
+
+fun square(var: int num) {
+    return num * num;
+}
+
