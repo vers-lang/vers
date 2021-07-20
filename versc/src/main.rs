@@ -8,7 +8,7 @@ use std::path::Path;
 use std::process::{exit, Command};
 
 use versc_lib::c::translate_to_c;
-use versc_lib::gcc::Gcc;
+use versc_lib::compile::{_e, _l};
 use versc_lib::syntax::{check_line, SYMBOLS};
 
 static mut FILE: &'static str = "";
@@ -79,8 +79,10 @@ fn main() {
     translate_to_c(&file_name);
 
     if link == "exe" {
-        Command::new("gcc")
-            .args(&["-Wall", "~/.vers/cstdlib", std_file, file_name.replace(".vers", ".c").as_str(), "-o", file_name.replace(".vers", "").as_str()])
-            .spawn();
+        _e(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"));
+    } else if link == "lib" {
+        _l(file_name.replace(".vers", ""), file_name.replace(".vers", ".c"));
+    } else {
+        red_ln!("Unknown link option, can't compile");
     }
 }
